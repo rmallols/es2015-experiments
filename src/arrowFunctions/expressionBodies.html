@@ -1,0 +1,11 @@
+<pre data-language="javascript">
+    //The left part of the arrow represents the fn arguments, and the right part, the return statement
+    odds  = evens.map(v => v + 1), //single argument, returns a primitive
+    pairs = evens.map(v => ({ even: v, odd: v + 1 })), //single argument, returns an object
+    nums  = evens.map((v, i) => v + i) //multiple arguments, return a primitive
+</pre>
+<pre data-language="javascript"  data-es5>
+    odds  = evens.map(function (v) { return v + 1 }),
+    pairs = evens.map(function (v) { return { even: v, odd: v + 1 } }),
+    nums  = evens.map(function (v, i) { return v + i })
+</pre>

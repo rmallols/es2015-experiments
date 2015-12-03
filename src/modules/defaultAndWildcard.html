@@ -1,0 +1,13 @@
+<pre data-language="javascript">
+    //  lib/mathplusplus.js
+    //This is like tunneling all the variables from lib/math via lib/mathplusplus.js
+    export * from "lib/math"
+    export var e = 2.71828182846
+    export default (x) => Math.exp(x) //Here we export the default value of the mathplusplus module
+
+    //  someApp.js
+    //pi was originally exposed by lib/math, but exported again via mathplusplus
+    //as exp doesn't match with any variable of mathplusplus, it takes the default one
+    import exp, { pi, e } from "lib/mathplusplus"
+    console.log("e^{π} = " + exp(pi))
+</pre>

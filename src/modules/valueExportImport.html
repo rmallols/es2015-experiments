@@ -1,0 +1,15 @@
+<pre data-language="javascript">
+    //  lib/math.js
+    export function sum (x, y) { return x + y } //Function available using import
+    export var pi = 3.141593 //Variable available using import
+
+    //  someApp.js
+    //Importing all the components from lib/math.js. Please note we need to define the placeholder with 'as'
+    import * as math from "lib/math"
+    console.log("2π = " + math.sum(math.pi, math.pi))
+
+    //  otherApp.js
+    //Importing the function and the variable specifically the components from lib/math.js
+    import { sum, pi } from "lib/math"
+    console.log("2π = " + sum(pi, pi))
+</pre>

@@ -1,0 +1,12 @@
+<pre data-language="javascript">
+    obj = {
+        foo: "bar",
+        [ "prop_" + foo() ]: 42 //This technique allows to define custom properties inline
+    }
+</pre>
+<pre data-language="javascript" data-es5>
+    obj = {
+        foo: "bar"
+    }
+    obj[ "prop_" + foo() ] = 42
+</pre>

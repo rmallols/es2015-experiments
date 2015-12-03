@@ -1,0 +1,27 @@
+{
+  "name": "es2015-experiments",
+  "version": "1.0.0",
+  "description": "The goal of this project is to play around with (some of the) features included on ES6 / ES2015.",
+  "main": "src/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmallols/es2015-experiments.git"
+  },
+  "author": "Ricardo Mallols",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rmallols/es2015-experiments/issues"
+  },
+  "homepage": "https://github.com/rmallols/es2015-experiments#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "webpack": "^1.12.9",
+    "webpack-livereload-plugin": "^0.4.0"
+  },
+  "dependencies": {
+    "html-loader": "^0.4.0"
+  }
+}

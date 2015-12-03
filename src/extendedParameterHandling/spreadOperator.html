@@ -1,0 +1,11 @@
+<pre data-language="javascript">
+    //So using '...' is a way to manage serialised arguments
+    var params = [ "hello", true, 7 ]
+    var other = [ 1, 2, ...params ] // [ 1, 2, "hello", true, 7 ]
+    f(1, 2, ...params) === 9
+
+    var str = "foo"
+    //Those serialised arguments are translated into an array by just wrapping it
+    //so if a = 'foo', ...a = 'f','o','o', and then [...a] = ['f', 'o', 'o']
+    var chars = [ ...str ] // [ "f", "o", "o" ]
+</pre>

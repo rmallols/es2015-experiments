@@ -1,0 +1,15 @@
+<pre data-language="javascript">
+    obj = {
+        foo (a, b) { //regular function
+        },
+        *quux (x, y) { //generator function
+        }
+    }
+</pre>
+<pre data-language="javascript" data-es5>
+    obj = {
+        foo: function (a, b) {
+        },
+        //  quux: no equivalent generator function in ES5
+    }
+</pre>
