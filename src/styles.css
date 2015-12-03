@@ -1,10 +1,15 @@
 body {
     font-family: Arial;
+    padding: 30px;
 }
 
 pre {
     position: relative;
     display: block;
+}
+
+h1 {
+    margin-top: 0;
 }
 
 pre[data-es5]::before {
@@ -22,19 +27,33 @@ features-menu {
     display: block;
     float: left;
     width: 30%;
+    padding-right: 30px;
+    box-sizing: border-box;
 }
 
 .features-menu-link {
     display: block;
     padding: 10px;
+    cursor: pointer;
 }
 
-features-content {
+.features-menu-link.is-active {
+    background-color: #B1E2F2;
+}
+
+features-content,
+#no-features-content-message {
     display: block;
     float: right;
     width: 70%;
+    box-sizing: border-box;
 }
 
 feature-content {
     display: none;
+}
+
+#no-features-content-message {
+    padding: 20px;
+    background-color: #B1E2F2;
 }

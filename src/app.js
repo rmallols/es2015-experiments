@@ -22,24 +22,65 @@
 
     registerFeaturesMenu(features);
     registerFeaturesContent(features);
+    registerNoFeaturesContentMessage();
 
     function registerFeaturesMenu(features) {
-        var featuresMenuElement = document.createElement('features-menu'),
-            featuresMenuLinkElement;
+        var featuresMenuElement = document.createElement('features-menu');
         features.forEach(function (featureTemplate, index) {
-            featuresMenuLinkElement = document.createElement('a');
-            featuresMenuLinkElement.innerText = featureTemplate.title;
-            featuresMenuLinkElement.className = 'features-menu-link';
-            featuresMenuLinkElement.setAttribute('target', index);
-            featuresMenuElement.appendChild(featuresMenuLinkElement);
-            featuresMenuLinkElement.addEventListener('click', function (e) {
-                var featuresContentElementId = 'feature-' + e.target.getAttribute('target'),
-                    featureContentElement = document.getElementById(featuresContentElementId),
-                    featureContentStyle = featureContentElement.style;
-                featureContentStyle.display = (featureContentElement.offsetParent === null) ? 'block' : 'none';
-            });
+            registerFeatureMenu(featureTemplate, featuresMenuElement, index);
         });
         document.body.appendChild(featuresMenuElement);
+    }
+
+    function registerFeatureMenu(featureTemplate, featuresMenuElement, index) {
+        var featuresMenuLinkElement = document.createElement('a');
+        featuresMenuLinkElement.innerText = featureTemplate.title;
+        featuresMenuLinkElement.setAttribute('class', 'features-menu-link');
+        featuresMenuLinkElement.setAttribute('target', index);
+        featuresMenuElement.appendChild(featuresMenuLinkElement);
+        manageFeaturesMenuClick(featuresMenuLinkElement);
+    }
+
+    function manageFeaturesMenuClick(featuresMenuLinkElement) {
+        featuresMenuLinkElement.addEventListener('click', function (e) {
+            var featuresMenuLinkElement = e.target,
+                featuresContentElementId = 'feature-' + featuresMenuLinkElement.getAttribute('target'),
+                featureContentElement = document.getElementById(featuresContentElementId),
+                featureContentStyle = featureContentElement.style,
+                noFeaturesContentMessageElement = document.getElementById('no-features-content-message');
+            manageFeaturesMenuLinkElementVisibility(featureContentElement, featureContentStyle, featuresMenuLinkElement, noFeaturesContentMessageElement);
+        });
+    }
+
+    function manageFeaturesMenuLinkElementVisibility(featureContentElement, featureContentStyle, featuresMenuLinkElement, noFeaturesContentMessageElement) {
+        if(featureContentElement.offsetParent === null) {
+            showFeaturesMenuLinkElement(featureContentStyle, featuresMenuLinkElement, noFeaturesContentMessageElement);
+        } else {
+            hideFeaturesMenuLinkElement(featureContentStyle, featuresMenuLinkElement, noFeaturesContentMessageElement);
+        }
+    }
+
+    function showFeaturesMenuLinkElement(featureContentStyle, featuresMenuLinkElement, noFeaturesContentMessageElement) {
+        featureContentStyle.display = 'block';
+        var oldFeaturesMenuLinkElementActive = document.getElementsByClassName('is-active')[0];
+        if(oldFeaturesMenuLinkElementActive) {
+            hideOldFeaturesContentElement(oldFeaturesMenuLinkElementActive, oldFeaturesMenuLinkElementActive);
+        }
+        featuresMenuLinkElement.classList.add('is-active');
+        noFeaturesContentMessageElement.style.display = 'none';
+    }
+
+    function hideOldFeaturesContentElement(oldFeaturesMenuLinkElementActive, oldFeaturesMenuLinkElementActive) {
+        oldFeaturesMenuLinkElementActive.classList.remove('is-active');
+        var oldFeaturesContentElementId = 'feature-' + oldFeaturesMenuLinkElementActive.getAttribute('target'),
+            oldFeaturesContentElement = document.getElementById(oldFeaturesContentElementId);
+        oldFeaturesContentElement.style.display = 'none';
+    }
+
+    function hideFeaturesMenuLinkElement(featureContentStyle, featuresMenuLinkElement, noFeaturesContentMessageElement) {
+        featureContentStyle.display = 'none';
+        featuresMenuLinkElement.classList.remove('is-active');
+        noFeaturesContentMessageElement.style.display = 'block';
     }
 
     function registerFeaturesContent(features) {
@@ -51,5 +92,12 @@
                                                 '</feature-content>';
         });
         document.body.appendChild(featuresContentElement);
+    }
+
+    function registerNoFeaturesContentMessage() {
+        var noFeaturesContentMessageElement = document.createElement('div');
+        noFeaturesContentMessageElement.setAttribute('id', 'no-features-content-message');
+        noFeaturesContentMessageElement.innerText = 'Please select a feature from the menu';
+        document.body.appendChild(noFeaturesContentMessageElement);
     }
 })();
