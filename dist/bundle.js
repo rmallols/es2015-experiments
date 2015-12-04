@@ -48,22 +48,55 @@
 
 	    var req = __webpack_require__(1),
 	        features = [
-	            { title: 'Constants', path: './constants/constants.html' },
-	            { title: 'Arrow functions - Expression bodies', path: './arrowFunctions/expressionBodies.html' },
-	            { title: 'Arrow functions - Statement bodies', path: './arrowFunctions/statementBodies.html' },
-	            { title: 'Arrow functions - Lexical \'this\'', path: './arrowFunctions/lexicalThis.html' },
-	            { title: 'Extended parameter handling - Default parameter values', path: './extendedParameterHandling/defaultParameterValues.html' },
-	            { title: 'Extended parameter handling - Rest parameter', path: './extendedParameterHandling/restParameter.html' },
-	            { title: 'Extended parameter handling - Spread operator', path: './extendedParameterHandling/spreadOperator.html' },
-	            { title: 'Template literals - String interpolation', path: './templateLiterals/stringInterpolation.html' },
-	            { title: 'Enhanced object properties - Property shorthand', path: './enhancedObjectProperties/propertyShorthand.html' },
-	            { title: 'Enhanced object properties - Computed property names', path: './enhancedObjectProperties/computedPropertyNames.html' },
-	            { title: 'Enhanced object properties - Method properties', path: './enhancedObjectProperties/methodProperties.html' },
-	            { title: 'Destructing assignment - Parameter context matching', path: './destructuringAssignment/parameterContextMatching.html' },
-	            { title: 'Modules - Value export / import', path: './modules/valueExportImport.html' },
-	            { title: 'Modules - Default and wildcard', path: './modules/defaultAndWildcard.html' },
-	            { title: 'Classes - class definition', path: './classes/classDefinition.html' },
-	            { title: 'Classes - class inheritance', path: './classes/classInheritance.html' }
+	            {
+	                group: 'Constants',
+	                features: [
+	                    { title: 'Constants', path: './constants/constants.html' }
+	                ]
+	            }, {
+	                group: 'Arrow functions',
+	                features: [
+	                    { title: 'Expression bodies', path: './arrowFunctions/expressionBodies.html' },
+	                    { title: 'Statement bodies', path: './arrowFunctions/statementBodies.html' },
+	                    { title: 'Lexical \'this\'', path: './arrowFunctions/lexicalThis.html' }
+	                ]
+	            }, {
+	                group: 'Extended parameter handling',
+	                features: [
+	                    { title: 'Default parameter values', path: './extendedParameterHandling/defaultParameterValues.html' },
+	                    { title: 'Rest paramete', path: './extendedParameterHandling/restParameter.html' },
+	                    { title: 'Spread operator', path: './extendedParameterHandling/spreadOperator.html' }
+	                ]
+	            }, {
+	                group: 'Template literals',
+	                features: [
+	                    { title: 'String interpolation', path: './templateLiterals/stringInterpolation.html' }
+	                ]
+	            }, {
+	                group: 'Enhanced object properties',
+	                features: [
+	                    { title: 'Property shorthand', path: './enhancedObjectProperties/propertyShorthand.html' },
+	                    { title: 'Computed property names', path: './enhancedObjectProperties/computedPropertyNames.html' },
+	                    { title: 'Method properties', path: './enhancedObjectProperties/methodProperties.html' }
+	                ]
+	            }, {
+	                group: 'Destructing assignment',
+	                features: [
+	                    { title: 'Parameter context matching', path: './destructuringAssignment/parameterContextMatching.html' }
+	                ]
+	            }, {
+	                group: 'Modules',
+	                features: [
+	                    { title: 'Value export / import', path: './modules/valueExportImport.html' },
+	                    { title: 'Default and wildcard', path: './modules/defaultAndWildcard.html' }
+	                ]
+	            }, {
+	                group: 'Classes',
+	                features: [
+	                    { title: 'Class definition', path: './classes/classDefinition.html' },
+	                    { title: 'Class inheritance', path: './classes/classInheritance.html' }
+	                ]
+	            }
 	        ];
 
 	    registerFeaturesMenu(features);
@@ -72,18 +105,31 @@
 
 	    function registerFeaturesMenu(features) {
 	        var featuresMenuElement = document.createElement('features-menu');
-	        features.forEach(function (featureTemplate, index) {
-	            registerFeatureMenu(featureTemplate, featuresMenuElement, index);
+	        features.forEach(function (featureGroup, index) {
+	            registerFeatureMenu(featureGroup, featuresMenuElement, index);
 	        });
 	        document.body.appendChild(featuresMenuElement);
 	    }
 
-	    function registerFeatureMenu(featureTemplate, featuresMenuElement, index) {
+	    function registerFeatureMenu(featureGroup, featuresMenuElement, featureGroupIndex) {
+	        var featuresMenuGroupElement = document.createElement('div'),
+	            featuresMenuGroupElementTitle = document.createElement('div');
+	        featuresMenuGroupElementTitle.setAttribute('class', 'features-menu-group-title');
+	        featuresMenuGroupElementTitle.innerText = featureGroup.group;
+	        featuresMenuGroupElement.setAttribute('class', 'features-menu-group');
+	        featuresMenuGroupElement.appendChild(featuresMenuGroupElementTitle);
+	        featureGroup.features.forEach(function (feature, featureIndex) {
+	            registerFeatureMenuLinkToGroup(feature, featuresMenuGroupElement, featureGroupIndex, featureIndex);
+	        });
+	        featuresMenuElement.appendChild(featuresMenuGroupElement);
+	    }
+
+	    function registerFeatureMenuLinkToGroup(feature, featuresMenuGroupElement, featureGroupIndex, featureIndex) {
 	        var featuresMenuLinkElement = document.createElement('a');
-	        featuresMenuLinkElement.innerText = featureTemplate.title;
-	        featuresMenuLinkElement.setAttribute('class', 'features-menu-link');
-	        featuresMenuLinkElement.setAttribute('target', index);
-	        featuresMenuElement.appendChild(featuresMenuLinkElement);
+	        featuresMenuLinkElement.innerText = feature.title;
+	        featuresMenuLinkElement.setAttribute('class', 'features-menu-group-link');
+	        featuresMenuLinkElement.setAttribute('target', featureGroupIndex + featureIndex);
+	        featuresMenuGroupElement.appendChild(featuresMenuLinkElement);
 	        manageFeaturesMenuClick(featuresMenuLinkElement);
 	    }
 
@@ -131,11 +177,14 @@
 
 	    function registerFeaturesContent(features) {
 	        var featuresContentElement = document.createElement('features-content');
-	        features.forEach(function (featureTemplate, index) {
-	            featuresContentElement.innerHTML +=  '<feature-content id="feature-' + index + '" class="feature-content">' +
-	                                                    '<h1>' + featureTemplate.title + '</h1>' +
-	                                                    req(featureTemplate.path) +
-	                                                '</feature-content>';
+	        features.forEach(function (featureTemplateGroup, groupTitleIndex) {
+	            var groupTitle = featureTemplateGroup.group;
+	            featureTemplateGroup.features.forEach(function (featureTemplate, featureTitleIndex) {
+	                featuresContentElement.innerHTML +=  '<feature-content id="feature-' + (groupTitleIndex + featureTitleIndex) + '" class="feature-content">' +
+	                                                        '<h1>' + groupTitle + ' - ' + featureTemplate.title + '</h1>' +
+	                                                        req(featureTemplate.path) +
+	                                                    '</feature-content>';
+	            });
 	        });
 	        document.body.appendChild(featuresContentElement);
 	    }

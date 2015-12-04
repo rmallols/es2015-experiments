@@ -31,13 +31,22 @@ features-menu {
     box-sizing: border-box;
 }
 
-.features-menu-link {
-    display: block;
+.features-menu-group-title {
     padding: 10px;
+    background-color: #eee;
+}
+
+
+.features-menu-group-link {
+    display: block;
+    padding: 10px 10px 10px 20px;
+}
+
+.features-menu-group-link {
     cursor: pointer;
 }
 
-.features-menu-link.is-active {
+.features-menu-group-link.is-active {
     background-color: #B1E2F2;
 }
 
