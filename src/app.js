@@ -1,152 +1,116 @@
 (function () {
 
     var req = require.context("html!./", true, /^\.\/.*\.html/),
-        features = [
-            {
-                group: 'Constants',
-                features: [
-                    { title: 'Constants', path: './constants/constants.html' }
-                ]
-            }, {
-                group: 'Arrow functions',
-                features: [
-                    { title: 'Expression bodies', path: './arrowFunctions/expressionBodies.html' },
-                    { title: 'Statement bodies', path: './arrowFunctions/statementBodies.html' },
-                    { title: 'Lexical \'this\'', path: './arrowFunctions/lexicalThis.html' }
-                ]
-            }, {
-                group: 'Extended parameter handling',
-                features: [
-                    { title: 'Default parameter values', path: './extendedParameterHandling/defaultParameterValues.html' },
-                    { title: 'Rest paramete', path: './extendedParameterHandling/restParameter.html' },
-                    { title: 'Spread operator', path: './extendedParameterHandling/spreadOperator.html' }
-                ]
-            }, {
-                group: 'Template literals',
-                features: [
-                    { title: 'String interpolation', path: './templateLiterals/stringInterpolation.html' }
-                ]
-            }, {
-                group: 'Enhanced object properties',
-                features: [
-                    { title: 'Property shorthand', path: './enhancedObjectProperties/propertyShorthand.html' },
-                    { title: 'Computed property names', path: './enhancedObjectProperties/computedPropertyNames.html' },
-                    { title: 'Method properties', path: './enhancedObjectProperties/methodProperties.html' }
-                ]
-            }, {
-                group: 'Destructing assignment',
-                features: [
-                    { title: 'Parameter context matching', path: './destructuringAssignment/parameterContextMatching.html' }
-                ]
-            }, {
-                group: 'Modules',
-                features: [
-                    { title: 'Value export / import', path: './modules/valueExportImport.html' },
-                    { title: 'Default and wildcard', path: './modules/defaultAndWildcard.html' }
-                ]
-            }, {
-                group: 'Classes',
-                features: [
-                    { title: 'Class definition', path: './classes/classDefinition.html' },
-                    { title: 'Class inheritance', path: './classes/classInheritance.html' }
-                ]
-            }
-        ];
+        features = require('./features');
 
     registerFeaturesMenu(features);
     registerFeaturesContent(features);
     registerNoFeaturesContentMessage();
 
     function registerFeaturesMenu(features) {
-        var featuresMenuElement = document.createElement('features-menu');
-        features.forEach(function (featureGroup, index) {
-            registerFeatureMenu(featureGroup, featuresMenuElement, index);
+        var featuresMenuEl = document.createElement('features-menu'),
+            state = { index: 0 };
+        features.forEach((featureGroup) => {
+            registerFeatureMenu(featureGroup, featuresMenuEl, state);
         });
-        document.body.appendChild(featuresMenuElement);
+        document.body.appendChild(featuresMenuEl);
     }
 
-    function registerFeatureMenu(featureGroup, featuresMenuElement, featureGroupIndex) {
-        var featuresMenuGroupElement = document.createElement('div'),
-            featuresMenuGroupElementTitle = document.createElement('div');
-        featuresMenuGroupElementTitle.setAttribute('class', 'features-menu-group-title');
-        featuresMenuGroupElementTitle.innerText = featureGroup.group;
-        featuresMenuGroupElement.setAttribute('class', 'features-menu-group');
-        featuresMenuGroupElement.appendChild(featuresMenuGroupElementTitle);
-        featureGroup.features.forEach(function (feature, featureIndex) {
-            registerFeatureMenuLinkToGroup(feature, featuresMenuGroupElement, featureGroupIndex, featureIndex);
+    function registerFeatureMenu(featureGroup, featuresMenuEl, state) {
+        var featuresMenuGroupEl = createFeatureGroupEl(featureGroup);
+        featureGroup.features.forEach((feature) => {
+            registerFeatureMenuLinkToGroup(feature, featuresMenuGroupEl, state);
         });
-        featuresMenuElement.appendChild(featuresMenuGroupElement);
+        featuresMenuEl.appendChild(featuresMenuGroupEl);
     }
 
-    function registerFeatureMenuLinkToGroup(feature, featuresMenuGroupElement, featureGroupIndex, featureIndex) {
-        var featuresMenuLinkElement = document.createElement('a');
-        featuresMenuLinkElement.innerText = feature.title;
-        featuresMenuLinkElement.setAttribute('class', 'features-menu-group-link');
-        featuresMenuLinkElement.setAttribute('target', featureGroupIndex + featureIndex);
-        featuresMenuGroupElement.appendChild(featuresMenuLinkElement);
-        manageFeaturesMenuClick(featuresMenuLinkElement);
+    function createFeatureGroupEl(featureGroup) {
+        var featuresMenuGroupEl = document.createElement('div'),
+            featuresMenuGroupElTitle = document.createElement('div');
+        featuresMenuGroupElTitle.setAttribute('class', 'features-menu-group-title');
+        featuresMenuGroupElTitle.innerText = featureGroup.group;
+        featuresMenuGroupEl.setAttribute('class', 'features-menu-group');
+        featuresMenuGroupEl.appendChild(featuresMenuGroupElTitle);
+        return featuresMenuGroupEl;
     }
 
-    function manageFeaturesMenuClick(featuresMenuLinkElement) {
-        featuresMenuLinkElement.addEventListener('click', function (e) {
-            var featuresMenuLinkElement = e.target,
-                featuresContentElementId = 'feature-' + featuresMenuLinkElement.getAttribute('target'),
-                featureContentElement = document.getElementById(featuresContentElementId),
-                featureContentStyle = featureContentElement.style,
-                noFeaturesContentMessageElement = document.getElementById('no-features-content-message');
-            manageFeaturesMenuLinkElementVisibility(featureContentElement, featureContentStyle, featuresMenuLinkElement, noFeaturesContentMessageElement);
+    function registerFeatureMenuLinkToGroup(feature, featuresMenuGroupEl, state) {
+        var featuresMenuLinkEl = document.createElement('a');
+        featuresMenuLinkEl.innerText = feature.title;
+        featuresMenuLinkEl.setAttribute('class', 'features-menu-group-link');
+        featuresMenuLinkEl.setAttribute('target', state.index++);
+        featuresMenuGroupEl.appendChild(featuresMenuLinkEl);
+        manageFeaturesMenuClick(featuresMenuLinkEl);
+    }
+
+    function manageFeaturesMenuClick(featuresMenuLinkEl) {
+        featuresMenuLinkEl.addEventListener('click', (e) => {
+            var featuresMenuLinkEl = e.target,
+                featuresContentElId = 'feature-' + featuresMenuLinkEl.getAttribute('target'),
+                featureContentEl = document.getElementById(featuresContentElId),
+                featureContentStyle = featureContentEl.style,
+                noFeaturesContentMessageEl = document.getElementById('no-features-content-message');
+            manageFeaturesMenuLinkElVisibility( featureContentEl, featureContentStyle,
+                                                featuresMenuLinkEl, noFeaturesContentMessageEl);
         });
     }
 
-    function manageFeaturesMenuLinkElementVisibility(featureContentElement, featureContentStyle, featuresMenuLinkElement, noFeaturesContentMessageElement) {
-        if(featureContentElement.offsetParent === null) {
-            showFeaturesMenuLinkElement(featureContentStyle, featuresMenuLinkElement, noFeaturesContentMessageElement);
+    function manageFeaturesMenuLinkElVisibility(featureContentEl, featureContentStyle,
+                                                featuresMenuLinkEl, noFeaturesContentMessageEl) {
+        if(featureContentEl.offsetParent === null) {
+            showFeaturesMenuLinkEl(featureContentStyle, featuresMenuLinkEl, noFeaturesContentMessageEl);
         } else {
-            hideFeaturesMenuLinkElement(featureContentStyle, featuresMenuLinkElement, noFeaturesContentMessageElement);
+            hideFeaturesMenuLinkEl(featureContentStyle, featuresMenuLinkEl, noFeaturesContentMessageEl);
         }
     }
 
-    function showFeaturesMenuLinkElement(featureContentStyle, featuresMenuLinkElement, noFeaturesContentMessageElement) {
+    function showFeaturesMenuLinkEl(featureContentStyle, featuresMenuLinkEl, noFeaturesContentMessageEl) {
         featureContentStyle.display = 'block';
-        var oldFeaturesMenuLinkElementActive = document.getElementsByClassName('is-active')[0];
-        if(oldFeaturesMenuLinkElementActive) {
-            hideOldFeaturesContentElement(oldFeaturesMenuLinkElementActive, oldFeaturesMenuLinkElementActive);
+        var oldFeaturesMenuLinkElActive = document.getElementsByClassName('is-active')[0];
+        if(oldFeaturesMenuLinkElActive) {
+            hideOldFeaturesContentEl(oldFeaturesMenuLinkElActive);
         }
-        featuresMenuLinkElement.classList.add('is-active');
-        noFeaturesContentMessageElement.style.display = 'none';
+        featuresMenuLinkEl.classList.add('is-active');
+        noFeaturesContentMessageEl.style.display = 'none';
     }
 
-    function hideOldFeaturesContentElement(oldFeaturesMenuLinkElementActive, oldFeaturesMenuLinkElementActive) {
-        oldFeaturesMenuLinkElementActive.classList.remove('is-active');
-        var oldFeaturesContentElementId = 'feature-' + oldFeaturesMenuLinkElementActive.getAttribute('target'),
-            oldFeaturesContentElement = document.getElementById(oldFeaturesContentElementId);
-        oldFeaturesContentElement.style.display = 'none';
+    function hideOldFeaturesContentEl(oldFeaturesMenuLinkElActive) {
+        oldFeaturesMenuLinkElActive.classList.remove('is-active');
+        var oldFeaturesContentElId = 'feature-' + oldFeaturesMenuLinkElActive.getAttribute('target'),
+            oldFeaturesContentEl = document.getElementById(oldFeaturesContentElId);
+        oldFeaturesContentEl.style.display = 'none';
     }
 
-    function hideFeaturesMenuLinkElement(featureContentStyle, featuresMenuLinkElement, noFeaturesContentMessageElement) {
+    function hideFeaturesMenuLinkEl(featureContentStyle, featuresMenuLinkEl, noFeaturesContentMessageEl) {
         featureContentStyle.display = 'none';
-        featuresMenuLinkElement.classList.remove('is-active');
-        noFeaturesContentMessageElement.style.display = 'block';
+        featuresMenuLinkEl.classList.remove('is-active');
+        noFeaturesContentMessageEl.style.display = 'block';
     }
 
     function registerFeaturesContent(features) {
-        var featuresContentElement = document.createElement('features-content');
-        features.forEach(function (featureTemplateGroup, groupTitleIndex) {
-            var groupTitle = featureTemplateGroup.group;
-            featureTemplateGroup.features.forEach(function (featureTemplate, featureTitleIndex) {
-                featuresContentElement.innerHTML +=  '<feature-content id="feature-' + (groupTitleIndex + featureTitleIndex) + '" class="feature-content">' +
-                                                        '<h1>' + groupTitle + ' - ' + featureTemplate.title + '</h1>' +
-                                                        req(featureTemplate.path) +
-                                                    '</feature-content>';
-            });
+        var featuresContentEl = document.createElement('features-content'),
+            state = { index: 0 };
+        features.forEach((featureTemplateGroup) => {
+            registerFeatureGroup(   featureTemplateGroup.group, featureTemplateGroup.features,
+                                    featuresContentEl, state);
         });
-        document.body.appendChild(featuresContentElement);
+        document.body.appendChild(featuresContentEl);
+    }
+
+    function registerFeatureGroup(groupTitle, features, featuresContentEl, state) {
+        features.forEach((featureTemplate) => {
+            featuresContentEl.innerHTML +=
+                '<feature-content id="feature-' + (state.index++) + '" class="feature-content">' +
+                    '<h1>' + groupTitle + ' - ' + featureTemplate.title + '</h1>' +
+                    req(featureTemplate.path) +
+                '</feature-content>';
+        });
     }
 
     function registerNoFeaturesContentMessage() {
-        var noFeaturesContentMessageElement = document.createElement('div');
-        noFeaturesContentMessageElement.setAttribute('id', 'no-features-content-message');
-        noFeaturesContentMessageElement.innerText = 'Please select a feature from the menu';
-        document.body.appendChild(noFeaturesContentMessageElement);
+        var noFeaturesContentMessageEl = document.createElement('div');
+        noFeaturesContentMessageEl.setAttribute('id', 'no-features-content-message');
+        noFeaturesContentMessageEl.innerText = 'Please select a feature from the menu';
+        document.body.appendChild(noFeaturesContentMessageEl);
     }
 })();

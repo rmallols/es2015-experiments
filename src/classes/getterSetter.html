@@ -1,0 +1,31 @@
+<pre data-language="javascript">
+    class Rectangle {
+        constructor (width, height) {
+            this._width  = width
+            this._height = height
+        }
+        //Now it is possible to define the getters and setters directly as part of the class
+        set width  (width)  { this._width = width               }
+        get width  ()       { return this._width                }
+        set height (height) { this._height = height             }
+        get height ()       { return this._height               }
+        get area   ()       { return this._width * this._height }
+    }
+    var r = new Rectangle(50, 20)
+    r.area === 1000
+</pre>
+<pre data-language="javascript" data-es5>
+    var Rectangle = function (width, height) {
+        this._width  = width;
+        this._height = height;
+    };
+    Rectangle.prototype = {
+        set width  (width)  { this._width = width;               },
+        get width  ()       { return this._width;                },
+        set height (height) { this._height = height;             },
+        get height ()       { return this._height;               },
+        get area   ()       { return this._width * this._height; }
+    };
+    var r = new Rectangle(50, 20);
+    r.area === 1000;
+</pre>
