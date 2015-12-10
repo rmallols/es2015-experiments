@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Webpack build watch" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="C:/Program Files (x86)/nodejs/node" path-to-js-file="node_modules/webpack/bin/webpack.js" application-parameters="src\app.js dist\bundle.js --watch" working-dir="$PROJECT_DIR$">
+    <RunnerSettings RunnerId="Basic" />
+    <ConfigurationWrapper RunnerId="Basic" />
+    <method />
+  </configuration>
+</component>
