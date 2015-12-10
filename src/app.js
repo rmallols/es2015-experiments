@@ -1,7 +1,7 @@
 (function () {
 
     var req = require.context("html!./", true, /^\.\/.*\.html/),
-        features = require('./features');
+        features = require('./features/featuresList');
 
     registerFeaturesMenu(features);
     registerFeaturesContent(features);
@@ -102,7 +102,7 @@
             featuresContentEl.innerHTML +=
                 '<feature-content id="feature-' + (state.index++) + '" class="feature-content">' +
                     '<h1>' + groupTitle + ' - ' + featureTemplate.title + '</h1>' +
-                    req(featureTemplate.path) +
+                    req('./features/' + featureTemplate.path) +
                 '</feature-content>';
         });
     }
