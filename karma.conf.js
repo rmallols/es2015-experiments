@@ -16,7 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'dist/bundle.js',
-      'spec/fakeSpec.js'
+      'src/**/*Spec.js'
     ],
 
 
@@ -29,7 +29,7 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
       'dist/bundle.js': ['webpack'],
-      'spec/fakeSpec.js': ['webpack']
+      'src/**/*Spec.js': ['webpack']
     },
 
     webpackMiddleware: {
