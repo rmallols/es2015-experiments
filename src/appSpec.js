@@ -12,7 +12,7 @@ describe('app', function () {
             spyOn(domBuilder, 'registerNoFeaturesContentMessage');
 
         when:
-            require('./app');
+            require('./app').init();
 
         then:
             expect(domBuilder.registerFeaturesMenu).toHaveBeenCalledWith('list');

@@ -45,41 +45,22 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var domBuilder = __webpack_require__(1),
-	    features = __webpack_require__(23),
-	    bootstrap = function () {
+	    features = __webpack_require__(23);
+
+	module.exports = {
+	    init: function () {
 	        var featuresList = features.getList();
 	        domBuilder.registerFeaturesMenu(featuresList);
 	        domBuilder.registerFeaturesContent(featuresList);
 	        domBuilder.registerNoFeaturesContentMessage();
-	    };
-
-	    bootstrap();
-
-	module.exports = bootstrap;
-
+	    }
+	};
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var req = __webpack_require__(2);
-
-	function registerFeaturesMenu(features) {
-	    var featuresMenuEl = document.createElement('features-menu'),
-	        state = { index: 0 };
-	        features.forEach((featureGroup) => {
-	        registerFeatureMenu(featureGroup, featuresMenuEl, state);
-	    });
-	    document.body.appendChild(featuresMenuEl);
-	}
-
-	function registerFeatureMenu(featureGroup, featuresMenuEl, state) {
-	    var featuresMenuGroupEl = createFeatureGroupEl(featureGroup);
-	    featureGroup.features.forEach((feature) => {
-	        registerFeatureMenuLinkToGroup(feature, featuresMenuGroupEl, state);
-	    });
-	    featuresMenuEl.appendChild(featuresMenuGroupEl);
-	}
 
 	function createFeatureGroupEl(featureGroup) {
 	    var featuresMenuGroupEl = document.createElement('div'),
@@ -172,8 +153,25 @@
 	}
 
 	module.exports = {
-	    registerFeaturesMenu: registerFeaturesMenu,
-	    registerFeatureMenu: registerFeatureMenu,
+
+	    registerFeaturesMenu: function registerFeaturesMenu(features) {
+	        var featuresMenuEl = document.createElement('features-menu'),
+	            state = { index: 0 };
+	        //features.forEach((featureGroup) => {
+	        //    this.registerFeatureMenu(featureGroup, featuresMenuEl, state);
+	        //});
+	        this.registerFeatureMenu();
+	        document.body.appendChild(featuresMenuEl);
+	    },
+
+	    registerFeatureMenu: function registerFeatureMenu(featureGroup, featuresMenuEl, state) {
+	        var featuresMenuGroupEl = createFeatureGroupEl(featureGroup);
+	        featureGroup.features.forEach((feature) => {
+	            registerFeatureMenuLinkToGroup(feature, featuresMenuGroupEl, state);
+	        });
+	        featuresMenuEl.appendChild(featuresMenuGroupEl);
+	    },
+
 	    createFeatureGroupEl: createFeatureGroupEl,
 	    registerFeatureMenuLinkToGroup: registerFeatureMenuLinkToGroup,
 	    manageFeaturesMenuClick: manageFeaturesMenuClick,

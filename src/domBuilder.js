@@ -1,41 +1,5 @@
 var req = require.context("html!./", true, /^\.\/.*\.html/);
 
-function registerFeaturesMenu(features) {
-    var featuresMenuEl = document.createElement('features-menu'),
-        state = { index: 0 };
-        features.forEach((featureGroup) => {
-        registerFeatureMenu(featureGroup, featuresMenuEl, state);
-    });
-    document.body.appendChild(featuresMenuEl);
-}
-
-function registerFeatureMenu(featureGroup, featuresMenuEl, state) {
-    var featuresMenuGroupEl = createFeatureGroupEl(featureGroup);
-    featureGroup.features.forEach((feature) => {
-        registerFeatureMenuLinkToGroup(feature, featuresMenuGroupEl, state);
-    });
-    featuresMenuEl.appendChild(featuresMenuGroupEl);
-}
-
-function createFeatureGroupEl(featureGroup) {
-    var featuresMenuGroupEl = document.createElement('div'),
-        featuresMenuGroupElTitle = document.createElement('div');
-    featuresMenuGroupElTitle.setAttribute('class', 'features-menu-group-title');
-    featuresMenuGroupElTitle.innerText = featureGroup.group;
-    featuresMenuGroupEl.setAttribute('class', 'features-menu-group');
-    featuresMenuGroupEl.appendChild(featuresMenuGroupElTitle);
-    return featuresMenuGroupEl;
-}
-
-function registerFeatureMenuLinkToGroup(feature, featuresMenuGroupEl, state) {
-    var featuresMenuLinkEl = document.createElement('a');
-    featuresMenuLinkEl.innerText = feature.title;
-    featuresMenuLinkEl.setAttribute('class', 'features-menu-group-link');
-    featuresMenuLinkEl.setAttribute('target', state.index++);
-    featuresMenuGroupEl.appendChild(featuresMenuLinkEl);
-    manageFeaturesMenuClick(featuresMenuLinkEl);
-}
-
 function manageFeaturesMenuClick(featuresMenuLinkEl) {
     featuresMenuLinkEl.addEventListener('click', (e) => {
         var featuresMenuLinkEl = e.target,
@@ -108,10 +72,43 @@ function registerNoFeaturesContentMessage() {
 }
 
 module.exports = {
-    registerFeaturesMenu: registerFeaturesMenu,
-    registerFeatureMenu: registerFeatureMenu,
-    createFeatureGroupEl: createFeatureGroupEl,
-    registerFeatureMenuLinkToGroup: registerFeatureMenuLinkToGroup,
+
+    registerFeaturesMenu: function (features) {
+        var featuresMenuEl = document.createElement('features-menu'),
+            state = { index: 0 };
+        features.forEach((featureGroup) => {
+            this.registerFeatureMenu(featureGroup, featuresMenuEl, state);
+        });
+        document.body.appendChild(featuresMenuEl);
+    },
+
+    registerFeatureMenu: function (featureGroup, featuresMenuEl, state) {
+        var featuresMenuGroupEl = this.createFeatureGroupEl(featureGroup);
+        featureGroup.features.forEach((feature) => {
+            this.registerFeatureMenuLinkToGroup(feature, featuresMenuGroupEl, state);
+        });
+        featuresMenuEl.appendChild(featuresMenuGroupEl);
+    },
+
+    createFeatureGroupEl: function (featureGroup) {
+        var featuresMenuGroupEl = document.createElement('div'),
+            featuresMenuGroupElTitle = document.createElement('div');
+        featuresMenuGroupElTitle.setAttribute('class', 'features-menu-group-title');
+        featuresMenuGroupElTitle.innerText = featureGroup.group;
+        featuresMenuGroupEl.setAttribute('class', 'features-menu-group');
+        featuresMenuGroupEl.appendChild(featuresMenuGroupElTitle);
+        return featuresMenuGroupEl;
+    },
+
+    registerFeatureMenuLinkToGroup: function (feature, featuresMenuGroupEl, state) {
+        var featuresMenuLinkEl = document.createElement('a');
+        featuresMenuLinkEl.innerText = feature.title;
+        featuresMenuLinkEl.setAttribute('class', 'features-menu-group-link');
+        featuresMenuLinkEl.setAttribute('target', state.index++);
+        featuresMenuGroupEl.appendChild(featuresMenuLinkEl);
+        manageFeaturesMenuClick(featuresMenuLinkEl);
+    },
+
     manageFeaturesMenuClick: manageFeaturesMenuClick,
     manageFeaturesMenuLinkElVisibility: manageFeaturesMenuLinkElVisibility,
     showFeaturesMenuLinkEl: showFeaturesMenuLinkEl,
