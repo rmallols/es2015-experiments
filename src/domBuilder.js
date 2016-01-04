@@ -1,76 +1,5 @@
 var req = require.context("html!./", true, /^\.\/.*\.html/);
 
-function manageFeaturesMenuClick(featuresMenuLinkEl) {
-    featuresMenuLinkEl.addEventListener('click', (e) => {
-        var featuresMenuLinkEl = e.target,
-            featuresContentElId = 'feature-' + featuresMenuLinkEl.getAttribute('target'),
-            featureContentEl = document.getElementById(featuresContentElId),
-            featureContentStyle = featureContentEl.style,
-            noFeaturesContentMessageEl = document.getElementById('no-features-content-message');
-        manageFeaturesMenuLinkElVisibility( featureContentEl, featureContentStyle,
-            featuresMenuLinkEl, noFeaturesContentMessageEl);
-    });
-}
-
-function manageFeaturesMenuLinkElVisibility(featureContentEl, featureContentStyle,
-                                            featuresMenuLinkEl, noFeaturesContentMessageEl) {
-    if(featureContentEl.offsetParent === null) {
-        showFeaturesMenuLinkEl(featureContentStyle, featuresMenuLinkEl, noFeaturesContentMessageEl);
-    } else {
-        hideFeaturesMenuLinkEl(featureContentStyle, featuresMenuLinkEl, noFeaturesContentMessageEl);
-    }
-}
-
-function showFeaturesMenuLinkEl(featureContentStyle, featuresMenuLinkEl, noFeaturesContentMessageEl) {
-    featureContentStyle.display = 'block';
-    var oldFeaturesMenuLinkElActive = document.getElementsByClassName('is-active')[0];
-    if(oldFeaturesMenuLinkElActive) {
-        hideOldFeaturesContentEl(oldFeaturesMenuLinkElActive);
-    }
-    featuresMenuLinkEl.classList.add('is-active');
-    noFeaturesContentMessageEl.style.display = 'none';
-}
-
-function hideOldFeaturesContentEl(oldFeaturesMenuLinkElActive) {
-    oldFeaturesMenuLinkElActive.classList.remove('is-active');
-    var oldFeaturesContentElId = 'feature-' + oldFeaturesMenuLinkElActive.getAttribute('target'),
-        oldFeaturesContentEl = document.getElementById(oldFeaturesContentElId);
-    oldFeaturesContentEl.style.display = 'none';
-}
-
-function hideFeaturesMenuLinkEl(featureContentStyle, featuresMenuLinkEl, noFeaturesContentMessageEl) {
-    featureContentStyle.display = 'none';
-    featuresMenuLinkEl.classList.remove('is-active');
-    noFeaturesContentMessageEl.style.display = 'block';
-}
-
-function registerFeaturesContent(features) {
-    var featuresContentEl = document.createElement('features-content'),
-        state = { index: 0 };
-    features.forEach((featureTemplateGroup) => {
-        registerFeatureGroup(   featureTemplateGroup.group, featureTemplateGroup.features,
-            featuresContentEl, state);
-    });
-    document.body.appendChild(featuresContentEl);
-}
-
-function registerFeatureGroup(groupTitle, features, featuresContentEl, state) {
-    features.forEach((featureTemplate) => {
-        featuresContentEl.innerHTML +=
-            '<feature-content id="feature-' + (state.index++) + '" class="feature-content">' +
-            '<h1>' + groupTitle + ' - ' + featureTemplate.title + '</h1>' +
-            req('./features/' + featureTemplate.path) +
-            '</feature-content>';
-    });
-}
-
-function registerNoFeaturesContentMessage() {
-    var noFeaturesContentMessageEl = document.createElement('div');
-    noFeaturesContentMessageEl.setAttribute('id', 'no-features-content-message');
-    noFeaturesContentMessageEl.innerText = 'Please select a feature from the menu';
-    document.body.appendChild(noFeaturesContentMessageEl);
-}
-
 module.exports = {
 
     registerFeaturesMenu: function (features) {
@@ -106,15 +35,77 @@ module.exports = {
         featuresMenuLinkEl.setAttribute('class', 'features-menu-group-link');
         featuresMenuLinkEl.setAttribute('target', state.index++);
         featuresMenuGroupEl.appendChild(featuresMenuLinkEl);
-        manageFeaturesMenuClick(featuresMenuLinkEl);
+        this.manageFeaturesMenuClick(featuresMenuLinkEl);
     },
 
-    manageFeaturesMenuClick: manageFeaturesMenuClick,
-    manageFeaturesMenuLinkElVisibility: manageFeaturesMenuLinkElVisibility,
-    showFeaturesMenuLinkEl: showFeaturesMenuLinkEl,
-    hideOldFeaturesContentEl: hideOldFeaturesContentEl,
-    hideFeaturesMenuLinkEl: hideFeaturesMenuLinkEl,
-    registerFeaturesContent: registerFeaturesContent,
-    registerFeatureGroup: registerFeatureGroup,
-    registerNoFeaturesContentMessage: registerNoFeaturesContentMessage
+    manageFeaturesMenuClick: function (featuresMenuLinkEl) {
+        featuresMenuLinkEl.addEventListener('click', (e) => {
+            var featuresMenuLinkEl = e.target,
+                featuresContentElId = 'feature-' + featuresMenuLinkEl.getAttribute('target'),
+                featureContentEl = document.getElementById(featuresContentElId),
+                featureContentStyle = featureContentEl.style,
+                noFeaturesContentMessageEl = document.getElementById('no-features-content-message');
+            this.manageFeaturesMenuLinkElVisibility( featureContentEl, featureContentStyle,
+                featuresMenuLinkEl, noFeaturesContentMessageEl);
+        });
+    },
+
+    manageFeaturesMenuLinkElVisibility: function (featureContentEl, featureContentStyle,
+                                                  featuresMenuLinkEl, noFeaturesContentMessageEl) {
+        if(featureContentEl.offsetParent === null) {
+            this.showFeaturesMenuLinkEl(featureContentStyle, featuresMenuLinkEl, noFeaturesContentMessageEl);
+        } else {
+            this.hideFeaturesMenuLinkEl(featureContentStyle, featuresMenuLinkEl, noFeaturesContentMessageEl);
+        }
+    },
+
+    showFeaturesMenuLinkEl: function (featureContentStyle, featuresMenuLinkEl, noFeaturesContentMessageEl) {
+        featureContentStyle.display = 'block';
+        var oldFeaturesMenuLinkElActive = document.getElementsByClassName('is-active')[0];
+        if(oldFeaturesMenuLinkElActive) {
+            this.hideOldFeaturesContentEl(oldFeaturesMenuLinkElActive);
+        }
+        featuresMenuLinkEl.classList.add('is-active');
+        noFeaturesContentMessageEl.style.display = 'none';
+    },
+
+    hideOldFeaturesContentEl: function (oldFeaturesMenuLinkElActive) {
+        oldFeaturesMenuLinkElActive.classList.remove('is-active');
+        var oldFeaturesContentElId = 'feature-' + oldFeaturesMenuLinkElActive.getAttribute('target'),
+            oldFeaturesContentEl = document.getElementById(oldFeaturesContentElId);
+        oldFeaturesContentEl.style.display = 'none';
+    },
+
+    hideFeaturesMenuLinkEl: function (featureContentStyle, featuresMenuLinkEl, noFeaturesContentMessageEl) {
+        featureContentStyle.display = 'none';
+        featuresMenuLinkEl.classList.remove('is-active');
+        noFeaturesContentMessageEl.style.display = 'block';
+    },
+
+    registerFeaturesContent: function (features) {
+        var featuresContentEl = document.createElement('features-content'),
+            state = { index: 0 };
+        features.forEach((featureTemplateGroup) => {
+            this.registerFeatureGroup(featureTemplateGroup.group, featureTemplateGroup.features,
+                                      featuresContentEl, state);
+        });
+        document.body.appendChild(featuresContentEl);
+    },
+
+    registerFeatureGroup: function (groupTitle, features, featuresContentEl, state) {
+        features.forEach((featureTemplate) => {
+            featuresContentEl.innerHTML +=
+                '<feature-content id="feature-' + (state.index++) + '" class="feature-content">' +
+                '<h1>' + groupTitle + ' - ' + featureTemplate.title + '</h1>' +
+                req('./features/' + featureTemplate.path) +
+                '</feature-content>';
+        });
+    },
+
+    registerNoFeaturesContentMessage: function () {
+        var noFeaturesContentMessageEl = document.createElement('div');
+        noFeaturesContentMessageEl.setAttribute('id', 'no-features-content-message');
+        noFeaturesContentMessageEl.innerText = 'Please select a feature from the menu';
+        document.body.appendChild(noFeaturesContentMessageEl);
+    }
 };

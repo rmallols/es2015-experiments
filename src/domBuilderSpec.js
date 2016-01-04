@@ -73,4 +73,36 @@ describe('domBuilderSpec', function () {
                 expect(DOMNode.innerText).toBe('group');
         });
     });
+
+    describe('registerFeatureMenuLinkToGroup', function () {
+
+        it('adds a menu link to its parent group', function () {
+
+            var DOMNode = {
+                setAttribute: function () {}
+            }, featuresMenuGroupEl = {
+                appendChild: function () {}
+            };
+
+            given:
+                spyOn(document, 'createElement').and.returnValue(DOMNode);
+                spyOn(DOMNode, 'setAttribute');
+                spyOn(featuresMenuGroupEl, 'appendChild');
+                spyOn(domBuilder, 'manageFeaturesMenuClick');
+
+            when:
+                domBuilder.registerFeatureMenuLinkToGroup(
+                    { title: 'title'},
+                    featuresMenuGroupEl,
+                    { index: 0 }
+                );
+
+            then:
+                expect(DOMNode.innerText).toBe('title');
+                expect(DOMNode.setAttribute).toHaveBeenCalledWith('class', 'features-menu-group-link');
+                expect(DOMNode.setAttribute).toHaveBeenCalledWith('target', 0);
+                expect(featuresMenuGroupEl.appendChild).toHaveBeenCalledWith(DOMNode);
+                expect(domBuilder.manageFeaturesMenuClick).toHaveBeenCalledWith(DOMNode);
+        });
+    });
 });
